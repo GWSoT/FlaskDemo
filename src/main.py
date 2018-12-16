@@ -1,4 +1,4 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort, jsonify
 
 import client_manager as manager
 
@@ -8,8 +8,26 @@ filepath = "../data/clients.csv"
 
 @app.route("/clients", methods=["GET"])
 def get():
-    clients = manager.get_clients(filepath)
-    return clients.to_json(orient="records")
+    clients = manager.get_clients()
+    return jsonify(clients)
+
+
+@app.route("/clients/<int:client_id>", methods=['GET'])
+def get_by_id(client_id):
+    client = manager.get_by_id(client_id)
+    return jsonify(client)
+
+
+@app.route("/clients/<int:client_id>", methods=["DELETE"])
+def delete_by_id(client_id):
+    manager.delete_by_id(client_id)
+    return "Ok"
+
+
+@app.route("/clients/<int:client_id>", methods=["POST"])
+def update_by_id(client_id):
+    print(request.get_json())
+    return str(manager.update_by_id(client_id, request.get_json()))
 
 
 @app.route("/clients", methods=["POST"])

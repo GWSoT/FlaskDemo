@@ -1,19 +1,20 @@
 import pandas as pd
+import database as db
 
 
-def get_clients(filepath):
-    clients = pd.read_csv(filepath)
+def get_by_id(id):
+    return db.get_by_id(id)
+
+
+def delete_by_id(id):
+    db.delete_by_id(id)
+
+
+def get_clients():
+    clients = db.get_all()
     return clients
 
 
-def insert_client(client, filepath):
-    required_fields = ["id", "first_name", "last_name", "email", "gender"]
-    for requiered_field in required_fields:
-        if requiered_field not in client:
-            raise ValueError("Input data is incorrect!")
-
-    client_str = "{},{},{},{},{}\n"\
-        .format(client["id"], client["first_name"], client["last_name"], client["email"], client["gender"])
-
-    with open(filepath, "a") as file_obj:
-        file_obj.write(client_str)
+def update_by_id(id, new_person):
+    db.update_by_id(id, new_person)
+    return new_person
